@@ -1,0 +1,21 @@
+{
+  "name": "web-components",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dev-server/dev-server.js",
+    "dev": "nodemon dev-server/dev-server.js",
+    "copy-static-files": "cp -r ./pages/**/*.css ./build/ && cp -r ./pages/**/*.html ./build/",
+    "build": "tsc && npm run copy-static-files",
+    "watch": "tsc && npm run copy-static-files && tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Elbert Oh",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.18.1",
+    "nodemon": "^2.0.16",
+    "typescript": "^4.6.4"
+  }
+}
