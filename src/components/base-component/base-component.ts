@@ -1,6 +1,6 @@
 import { html } from "./html.js";
 import { type Css, css, applyStyles } from "./css.js";
-import { Props } from "../../models/props.js";
+import { State } from "../../models/state.js";
 
 abstract class BaseComponent extends HTMLElement {
   private readonly _currentClass: any = this.constructor;
@@ -8,7 +8,7 @@ abstract class BaseComponent extends HTMLElement {
   protected static observedProps: readonly string[];
   protected static propsSet: Set<string>;
 
-  protected readonly props: Props = new Props();
+  protected readonly state: State = new State();
 
   static styles: Css;
   static template: HTMLTemplateElement;
@@ -28,7 +28,7 @@ abstract class BaseComponent extends HTMLElement {
       return;
 
     if (this._currentClass.propsSet.has(property))
-      this.props.updateProp(property, newValue);
+      this.state.update(property, newValue);
   }
 
   async connectedCallback(): Promise<void> {

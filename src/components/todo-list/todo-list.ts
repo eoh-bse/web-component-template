@@ -45,7 +45,7 @@ class TodoList extends BaseComponent {
   }
 
   async setupProps(): Promise<void> {
-    await this.props.addCallbackAndTrigger(TodoListObservedProp.Name, (value: any): Promise<void> => {
+    await this.state.addUpdateHookAndTrigger(TodoListObservedProp.Name, (value: any): Promise<void> => {
       this.todoListOwner.innerText = `${value}'s todo list`;
       return Promise.resolve();
     });
