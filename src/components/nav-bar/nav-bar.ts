@@ -1,6 +1,6 @@
 import type { Menu } from "./types";
 
-class NavBar extends HTMLElement {
+export default class NavBar extends HTMLElement {
   private readonly menus: readonly Menu[] = [
     {
       name: "Home",
@@ -8,29 +8,32 @@ class NavBar extends HTMLElement {
     },
     {
       name: "About",
-      path: "/about"
+      path: "/about.html"
     }
   ];
 
   constructor() {
     super();
 
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
+  }
 
+  private static html: string =
+    `<style>@import "./nav-bar.css"</style>
+     <nav></nav>`;
+
+  connectedCallback(): void {
     this.render();
     this.createMenu();
   }
 
-  static getHtml(): string {
-    return `
-      <div>
-      </div>
-    `.trim();
+  render(): void {
+    this.shadowRoot.innerHTML = NavBar.html;
   }
 
   createMenu(): void {
-    const wrapper = this.shadowRoot.querySelector("div");
-    const menu = document.createElement("ui");
+    const navBar = this.shadowRoot.querySelector("nav");
+    const menu = document.createElement("ul");
     this.menus.forEach(item => {
       const li = document.createElement("li");
       const link = document.createElement("a");
@@ -41,15 +44,8 @@ class NavBar extends HTMLElement {
       menu.appendChild(li);
     });
 
-    wrapper.appendChild(menu);
-  }
-
-  render(): void {
-    if (!this.isConnected)
-      return;
-
-    this.shadowRoot.innerHTML = NavBar.getHtml();
+    navBar.appendChild(menu);
   }
 }
 
-customElements.define('nav-bar', NavBar);
+customElements.define("nav-bar", NavBar);

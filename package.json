@@ -5,20 +5,20 @@
   "description": "",
   "scripts": {
     "start": "node ./build-scripts/watchers/watcher.js",
-    "build": "node ./build-scripts/builders/build.js --target=./build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node ./build-scripts/builders/build.js",
+    "lint": "eslint **/*.ts **/*.js",
+    "test": "web-test-runner --files tests/**/*.spec.ts --coverage"
   },
   "author": "Elbert Oh",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
+    "@web/test-runner": "^0.15.0",
     "chokidar": "^3.5.3",
     "clean-css": "^5.3.1",
     "eslint": "^8.21.0",
-    "express": "^4.18.1",
     "html-minifier-terser": "^7.0.0",
-    "nodemon": "^2.0.16",
     "terser": "^5.15.1",
     "typescript": "^4.8.4"
   }

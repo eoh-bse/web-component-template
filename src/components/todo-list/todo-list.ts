@@ -1,9 +1,10 @@
-import { TodoListProps, type TodoListObservedProps } from "./types.js";
+import { TodoListObservedProp } from "./types";
+import { Props } from "../../lib/Props.js";
 
 class TodoList extends HTMLElement {
-  private static readonly observedProps: readonly TodoListObservedProps[] = ["name"];
+  private static readonly observedProps: readonly TodoListObservedProp[] = [TodoListObservedProp.Name];
   private static readonly propsSet: Set<string> = new Set(TodoList.observedProps);
-  private readonly props: TodoListProps = new TodoListProps();
+  private readonly props: Props = new Props();
 
   private todoListOwner: HTMLHeadingElement;
   private list: HTMLUListElement;
@@ -14,29 +15,28 @@ class TodoList extends HTMLElement {
     super();
 
     this.attachShadow({ mode: "open" });
+  }
 
+  static html: string =
+    `<style>@import "./todo-list.css"</style>
+     <div>
+       <h1></h1>
+       <ul></ul>
+
+       <label for="todo-item">Add todo:</label>
+       <input type="text" name="todo-item">
+       <button type="button">Add</button>
+     </div>`;
+
+  static get observedAttributes(): readonly string[] {
+    return TodoList.observedProps;
+  }
+
+  connectedCallback(): void {
     this.render();
     this.registerElements();
     this.registerEventListeners();
     this.setupProps();
-  }
-
-  static getHtml(): string {
-    return `
-      <style>@import "./todo-list.css"</style>
-      <div>
-        <h1></h1>
-        <ul></ul>
-
-        <label for="todo-item">Add todo:</label>
-        <input type="text" name="todo-item">
-        <button type="button">Add</button>
-      </div>
-    `.trim();
-  }
-
-  static get observedAttributes(): readonly string[] {
-    return TodoList.observedProps;
   }
 
   attributeChangedCallback(property: string, oldValue: any, newValue: any): void {
@@ -45,6 +45,10 @@ class TodoList extends HTMLElement {
 
     if (TodoList.propsSet.has(property))
       this.props.updateProp(property, newValue);
+  }
+
+  render(): void {
+    this.shadowRoot.innerHTML = TodoList.html;
   }
 
   registerElements(): void {
@@ -58,25 +62,18 @@ class TodoList extends HTMLElement {
     this.addTodoBtn.addEventListener("click", this.onAddTodo.bind(this));
   }
 
+  setupProps(): void {
+    this.props.addCallback(TodoListObservedProp.Name, true, (value: any): void => {
+      this.todoListOwner.innerText = `${value}'s todo list`;
+    });
+  }
+
   onAddTodo(): void {
     const todoItem = document.createElement("li");
     todoItem.innerText = this.addTodoTextBox.value;
     this.addTodoTextBox.value = "";
     this.list.appendChild(todoItem);
   }
-
-  render(): void {
-    if (!this.isConnected)
-      return;
-
-    this.shadowRoot.innerHTML = TodoList.getHtml();
-  }
-
-  setupProps(): void {
-    this.props.addCallback("name", (value: any): void => {
-      this.todoListOwner.innerText = `${value}'s todo list`;
-    });
-  }
 }
 
-customElements.define('todo-list', TodoList);
+customElements.define("todo-list", TodoList);
