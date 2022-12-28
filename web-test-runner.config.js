@@ -9,5 +9,8 @@ export default {
     })
   ],
   nodeResolve: true,
-  debug: false
+  debug: false,
+  coverageConfig: {
+    include: ["src/**/*.ts"]
+  }
 };

@@ -1,8 +1,5 @@
-import { chai, expect } from "@open-wc/testing";
-import chaiPromiseRejectionPlugin from "../helpers/chai-promise-rejection-plugin";
+import { expect } from "../helpers/expect";
 import { Props } from "../../src/models/props";
-
-chai.use(chaiPromiseRejectionPlugin);
 
 function buildAddCallbackError(propName: string): string {
   return `Callback for prop "${propName}" could not be added because prop "${propName}" does not exist`;
