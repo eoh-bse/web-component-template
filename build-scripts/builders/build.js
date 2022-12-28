@@ -2,21 +2,13 @@
 "use strict";
 
 import { exec } from "child_process";
-import { rm, mkdir } from "fs/promises";
 import util from "util";
-
+import { cleanDirectory } from "../utils/directory-cleaner.js";
 import BuildConfigSingleton from "./build-config.js";
 import { getAllFilesMatchingRegex } from "../utils/file-finder.js";
 import { minify } from "../minifiers/minifier.js";
 
 const executeCmd = util.promisify(exec);
-
-function clean(config) {
-  return rm(config.target, {
-    recursive: true,
-    force: true
-  });
-}
 
 async function compile(config) {
   console.info("Compiling typescript files...");
@@ -49,7 +41,7 @@ async function copyStaticFiles(config) {
 
 const buildConfig = await BuildConfigSingleton.instance.getOrCreate();
 
-await clean(buildConfig);
+await cleanDirectory(buildConfig.target);
 await compile(buildConfig);
 await copyStaticFiles(buildConfig);
 

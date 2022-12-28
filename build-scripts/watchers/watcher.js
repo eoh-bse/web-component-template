@@ -1,7 +1,10 @@
 import { spawn } from "child_process";
+import { cleanDirectory } from "../utils/directory-cleaner.js";
 import BuildConfigSingleton from "../builders/build-config.js";
 
 const buildConfig = await BuildConfigSingleton.instance.getOrCreate();
+
+await cleanDirectory(buildConfig.target);
 
 spawn("node ./build-scripts/watchers/html-file-watcher.js", { shell: true });
 spawn("node ./build-scripts/watchers/css-file-watcher.js", {
