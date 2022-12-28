@@ -89,13 +89,13 @@ function writeHtmlFiles(htmlFiles) {
 }
 
 function writeJsFiles(jsFiles) {
-  return jsFiles.flatMap(js => {
+  return Promise.all(jsFiles.flatMap(js => {
     const tasks = [];
     tasks.push(writeFile(js.newPath, js.content, "utf8"));
     tasks.push(rm(js.oldPath));
 
     return tasks;
-  });
+  }));
 }
 
 async function addContentHashToCacheableFiles(buildDir) {
