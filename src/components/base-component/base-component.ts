@@ -1,42 +1,8 @@
+import { html } from "./html.js";
+import { type Css, css, applyStyles } from "./css.js";
 import { Props } from "../../models/props.js";
 
-export type Css = string;
-
-export function html(strings: TemplateStringsArray): HTMLTemplateElement {
-  if (strings.length > 1)
-    throw new Error("Interpolating values into HTML is not allowed");
-
-  const template = document.createElement("template");
-  template.innerHTML = strings[0];
-
-  return template;
-}
-
-export function css(strings: TemplateStringsArray): Css {
-  if (strings.length > 1)
-    throw new Error("Interpolating values into CSS is not allowed");
-
-  return strings[0];
-}
-
-const adoptedStyleSheetsSupported =
-  window.ShadowRoot && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype;
-
-function applyStyles(shadowRoot: ShadowRoot, cssString: Css): void {
-  if (adoptedStyleSheetsSupported) {
-    const newStyleSheet = new CSSStyleSheet();
-    newStyleSheet.replaceSync(cssString);
-    shadowRoot.adoptedStyleSheets = [newStyleSheet];
-
-    return;
-  }
-
-  const style = document.createElement("style");
-  style.textContent = cssString;
-  shadowRoot.appendChild(style);
-}
-
-export abstract class BaseComponent extends HTMLElement {
+abstract class BaseComponent extends HTMLElement {
   private readonly _currentClass: any = this.constructor;
 
   protected static observedProps: readonly string[];
@@ -77,3 +43,6 @@ export abstract class BaseComponent extends HTMLElement {
 
   protected abstract onRender(): Promise<void>;
 }
+
+export type { Css };
+export { html, css, BaseComponent };
