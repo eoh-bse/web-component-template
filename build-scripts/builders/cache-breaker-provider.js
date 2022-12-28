@@ -1,5 +1,4 @@
-import { readFileSync } from "fs";
-import { writeFile, rm } from "fs/promises";
+import { readFile, writeFile, rm } from "fs/promises";
 import { exec } from "child_process";
 import util from "util";
 import { getAllFilesMatchingRegex } from "../utils/file-finder.js";
@@ -19,40 +18,49 @@ function replaceFileName(path, regex, newFileName) {
 
 function getAllHtmlFiles(buildDir) {
   const htmlFilePaths = getAllFilesMatchingRegex(buildDir, /.*\.html$/);
-  const htmlFileContentMap = htmlFilePaths.map(path => {
+  const htmlFileContentMapPromise = htmlFilePaths.map(async path => {
     return {
       path,
-      content: readFileSync(path, "utf8")
+      content: await readFile(path, "utf8")
     };
   });
 
-  return htmlFileContentMap;
+  return Promise.all(htmlFileContentMapPromise);
+}
+
+function getAllCssFiles(buildDir) {
+  const cssFilePaths = getAllFilesMatchingRegex(buildDir, /.*\.css$/);
+  const cssFilePathMap = cssFilePaths.map(path => {
+    return {
+      oldPath: path
+    };
+  });
+
+  return Promise.resolve(cssFilePathMap);
 }
 
 function getAllJsFiles(buildDir) {
-  const htmlFilePaths = getAllFilesMatchingRegex(buildDir, /.*\.js$/);
-  const htmlFileContentMap = htmlFilePaths.map(path => {
+  const jsFilePaths = getAllFilesMatchingRegex(buildDir, /.*\.js$/);
+  const jsFileContentMapPromise = jsFilePaths.map(async path => {
     return {
       oldPath: path,
-      content: readFileSync(path, "utf8")
+      content: await readFile(path, "utf8")
     };
   });
 
-  return htmlFileContentMap;
+  return Promise.all(jsFileContentMapPromise);
 }
 
-async function addContentHashToCssFiles(buildDir, htmlFiles) {
-  const filePaths = getAllFilesMatchingRegex(buildDir, /.*\.css$/);
+function addContentHashToCssFiles(htmlFiles, cssFiles) {
   const fileNameRegex = /[a-zA-Z0-9-]*\.css$/;
   const extension = ".css";
 
-  for (const path of filePaths) {
-    const fileName = getFileNameWithoutExtension(path, fileNameRegex, extension);
-    const contentHash = getFileContentHashFromPath(path);
+  for (const cssFile of cssFiles) {
+    const fileName = getFileNameWithoutExtension(cssFile.oldPath, fileNameRegex, extension);
+    const contentHash = getFileContentHashFromPath(cssFile.oldPath);
     const newFileName = `${fileName}.${contentHash}${extension}`;
-    const newPath = replaceFileName(path, fileNameRegex, newFileName);
-
-    await executeCmd(`mv ${path} ${newPath}`);
+    const newPath = replaceFileName(cssFile.oldPath, fileNameRegex, newFileName);
+    cssFile.newPath = newPath;
 
     const oldFileName = `${fileName}${extension}`;
     for (const htmlFile of htmlFiles)
@@ -85,7 +93,11 @@ function addContentHashToJsFiles(htmlFiles, jsFiles) {
 }
 
 function writeHtmlFiles(htmlFiles) {
-  return htmlFiles.map(html => writeFile(html.path, html.content, "utf8"));
+  return Promise.all(htmlFiles.map(html => writeFile(html.path, html.content, "utf8")));
+}
+
+function writeCssFiles(cssFiles) {
+  return Promise.all(cssFiles.map(css => executeCmd(`mv ${css.oldPath} ${css.newPath}`)));
 }
 
 function writeJsFiles(jsFiles) {
@@ -99,14 +111,13 @@ function writeJsFiles(jsFiles) {
 }
 
 async function addContentHashToCacheableFiles(buildDir) {
-  const htmlFiles = await getAllHtmlFiles(buildDir);
-  const jsFiles = await getAllJsFiles(buildDir);
+  const [htmlFiles, cssFiles, jsFiles] =
+    await Promise.all([getAllHtmlFiles(buildDir), getAllCssFiles(buildDir), getAllJsFiles(buildDir)]);
 
-  await addContentHashToCssFiles(buildDir, htmlFiles);
+  addContentHashToCssFiles(htmlFiles, cssFiles);
   addContentHashToJsFiles(htmlFiles, jsFiles);
 
-  await writeHtmlFiles(htmlFiles);
-  await writeJsFiles(jsFiles);
+  await Promise.all([writeHtmlFiles(htmlFiles), writeCssFiles(cssFiles), writeJsFiles(jsFiles)]);
 }
 
 export { addContentHashToCacheableFiles };
