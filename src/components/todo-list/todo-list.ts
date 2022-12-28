@@ -3,7 +3,6 @@ import { TodoListObservedProp } from "./types.js";
 
 class TodoList extends BaseComponent {
   protected static override readonly observedProps: readonly TodoListObservedProp[] = [TodoListObservedProp.Name];
-  protected static override readonly propsSet: Set<string> = new Set(TodoList.observedProps);
 
   private todoListOwner: HTMLHeadingElement;
   private list: HTMLUListElement;

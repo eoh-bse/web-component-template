@@ -6,7 +6,6 @@ abstract class BaseComponent extends HTMLElement {
   private readonly _currentClass: any = this.constructor;
 
   protected static observedProps: readonly string[];
-  protected static propsSet: Set<string>;
 
   protected readonly state: State = new State();
 
@@ -27,8 +26,7 @@ abstract class BaseComponent extends HTMLElement {
     if (oldValue === newValue)
       return;
 
-    if (this._currentClass.propsSet.has(property))
-      this.state.update(property, newValue);
+    this.state.update(property, newValue);
   }
 
   async connectedCallback(): Promise<void> {
