@@ -1,8 +1,8 @@
 {
-  "name": "web-components",
+  "name": "web-component-template",
   "type": "module",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple, lightweight and boilerplate code set-up for web-component-based front-end project with heavy focus on avoiding bloat and complexity that comes with external dependencies",
   "scripts": {
     "preinstall": "npx force-resolutions",
     "start": "node ./build-scripts/watchers/watcher.js",
@@ -12,7 +12,7 @@
     "test": "npm run build:test && web-test-runner --coverage",
     "lint": "eslint **/*.ts **/*.js"
   },
-  "author": "Elbert Oh",
+  "author": "Elbert Oh <ellokri89@gmail.com> (https://github.com/eoh-bse)",
   "license": "MIT",
   "devDependencies": {
     "@open-wc/semantic-dom-diff": "^0.19.7",
