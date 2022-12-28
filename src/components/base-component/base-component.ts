@@ -36,7 +36,7 @@ abstract class BaseComponent extends HTMLElement {
 
   render(): void {
     applyStyles(this.shadowRoot, this._currentClass.styles);
-    this.shadowRoot.appendChild(this._currentClass.template.content.firstElementChild.cloneNode(true));
+    this.shadowRoot.appendChild(this._currentClass.template.content.cloneNode(true));
   }
 
   protected abstract onRender(): Promise<void>;

@@ -18,21 +18,19 @@ class TodoList extends BaseComponent {
   `;
 
   static override template: HTMLTemplateElement = html`
-    <div>
-      <h1></h1>
-      <ul></ul>
+    <h1></h1>
+    <ul></ul>
 
-      <div id="add-todo">
-        <label for="todo-item">Add todo:</label>
-        <input type="text" name="todo-item">
-        <button type="button">Add</button>
-      </div>
+    <div id="add-todo">
+      <label for="todo-item">Add todo:</label>
+      <input type="text" name="todo-item">
+      <button type="button">Add</button>
+    </div>
 
-      <div id="name-change">
-        <label for="name-change">Change Name:</label>
-        <input type="text" name="name-change">
-        <button type="button">Change Name</button>
-      </div>
+    <div id="name-change">
+      <label for="name-change">Change Name:</label>
+      <input type="text" name="name-change">
+      <button type="button">Change Name</button>
     </div>
   `;
 
