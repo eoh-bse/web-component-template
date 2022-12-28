@@ -1,23 +1,17 @@
 {
   "root": true,
   "env": {
-    "browser": true,
+    "node": true,
     "es6": true,
     "es2016": true
   },
   "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/strict"
+    "eslint:recommended"
   ],
-  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": [
-      "./tsconfig.json"
-    ]
+    "ecmaVersion": 13,
+    "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint"
-  ],
   "rules": {
     "no-duplicate-imports": [
       "error",
@@ -37,7 +31,6 @@
     "class-methods-use-this": "error",
     "block-scoped-var": "error",
     "no-return-await": "error",
-    "no-console": "warn",
     "require-await": "error",
     "func-names": [
       "error",
@@ -88,29 +81,57 @@
       "error",
       "last"
     ],
-    "no-unused-vars": "off",
-    "@typescript-eslint/array-type": [
+    "quotes": [
       "error",
-      {
-        "default": "array",
-        "readonly": "array"
-      }
+      "double"
     ],
-    "@typescript-eslint/consistent-generic-constructors": [
-      "error",
-      "type-annotation"
-    ],
-    "@typescript-eslint/explicit-function-return-type": "error",
-    "@typescript-eslint/consistent-type-exports": "error",
-    "@typescript-eslint/consistent-type-imports": "error",
-    "@typescript-eslint/consistent-type-definitions": "off",
-    "@typescript-eslint/no-unnecessary-condition": "off",
-    "@typescript-eslint/no-unused-vars": "error"
+    "no-unused-vars": "off"
   },
-  "ignorePatterns": [
-    "node-modules",
-    "build",
-    "dev-server",
-    "build-scripts"
+  "overrides": [
+    {
+      "files": [
+        "**/*.ts"
+      ],
+      "env": {
+        "browser": true,
+        "es6": true,
+        "es2016": true
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/strict"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": [
+          "./tsconfig.json",
+          "./tests/tsconfig.json"
+        ]
+      },
+      "plugins": [
+        "@typescript-eslint"
+      ],
+      "rules": {
+        "no-console": "error",
+        "@typescript-eslint/array-type": [
+          "error",
+          {
+            "default": "array",
+            "readonly": "array"
+          }
+        ],
+        "@typescript-eslint/consistent-generic-constructors": [
+          "error",
+          "type-annotation"
+        ],
+        "@typescript-eslint/explicit-function-return-type": "error",
+        "@typescript-eslint/consistent-type-exports": "error",
+        "@typescript-eslint/consistent-type-imports": "error",
+        "@typescript-eslint/consistent-type-definitions": "off",
+        "@typescript-eslint/no-unnecessary-condition": "off",
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/prefer-nullish-coalescing": "off"
+      }
+    }
   ]
 }
