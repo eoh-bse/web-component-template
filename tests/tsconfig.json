@@ -89,6 +89,19 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     // "skipLibCheck": true, /* Skip type checking all .d.ts files. */
+    /* Plugins */
+    "plugins": [
+      {
+        "name": "ts-lit-plugin",
+        "rules": {
+          "no-unknown-tag-name": "error",
+          "no-missing-import": "off",
+          "no-unclosed-tag": "error",
+          "no-missing-element-type-definition": "error",
+          "no-invalid-css": "error"
+        }
+      }
+    ]
   },
   "include": [
     "**/*.ts"

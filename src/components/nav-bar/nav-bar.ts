@@ -1,7 +1,8 @@
+import { type Css, BaseComponent, html, css } from "../base-component/base-component.js";
 import type { Menu } from "./types";
 
-class NavBar extends HTMLElement {
-  private readonly menus: readonly Menu[] = [
+class NavBar extends BaseComponent {
+  private readonly _menus: readonly Menu[] = [
     {
       name: "Home",
       path: "/"
@@ -12,29 +13,44 @@ class NavBar extends HTMLElement {
     }
   ];
 
-  constructor() {
-    super();
+  static override styles: Css = css`
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: var(--background);
+    }
 
-    this.attachShadow({ mode: "open" });
-  }
+    li {
+      float: left;
+    }
 
-  private static html: string =
-    `<style>@import "./nav-bar.css"</style>
-     <nav></nav>`;
+    li a {
+      display: block;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      text-decoration: none;
+    }
 
-  connectedCallback(): void {
-    this.render();
+    li a:hover {
+      background-color: var(--background-hover);
+      transition: 0.3s;
+    }
+  `;
+
+  static override template: HTMLTemplateElement = html`<nav></nav>`;
+
+  protected override onRender(): Promise<void> {
     this.createMenu();
-  }
-
-  render(): void {
-    this.shadowRoot.innerHTML = NavBar.html;
+    return Promise.resolve();
   }
 
   createMenu(): void {
     const navBar = this.shadowRoot.querySelector("nav");
     const menu = document.createElement("ul");
-    this.menus.forEach(item => {
+    this._menus.forEach(item => {
       const li = document.createElement("li");
       const link = document.createElement("a");
       link.innerText = item.name;
@@ -49,3 +65,9 @@ class NavBar extends HTMLElement {
 }
 
 customElements.define("nav-bar", NavBar);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "nav-bar": NavBar
+  }
+}

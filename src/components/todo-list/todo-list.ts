@@ -1,54 +1,36 @@
+import { type Css, BaseComponent, html, css } from "../base-component/base-component.js";
 import { TodoListObservedProp } from "./types.js";
-import { Props } from "../../models/props.js";
 
-class TodoList extends HTMLElement {
-  private static readonly observedProps: readonly TodoListObservedProp[] = [TodoListObservedProp.Name];
-  private static readonly propsSet: Set<string> = new Set(TodoList.observedProps);
-  private readonly props: Props = new Props();
+class TodoList extends BaseComponent {
+  protected static override readonly observedProps: readonly TodoListObservedProp[] = [TodoListObservedProp.Name];
+  protected static override readonly propsSet: Set<string> = new Set(TodoList.observedProps);
 
   private todoListOwner: HTMLHeadingElement;
   private list: HTMLUListElement;
   private addTodoTextBox: HTMLInputElement;
   private addTodoBtn: HTMLButtonElement;
 
-  constructor() {
-    super();
+  static override styles: Css = css`
+    h1 {
+      color: var(--main-color);
+    }
+  `;
 
-    this.attachShadow({ mode: "open" });
-  }
+  static override template: HTMLTemplateElement = html`
+    <div>
+      <h1></h1>
+      <ul></ul>
 
-  static html: string =
-    `<style>@import "./todo-list.css"</style>
-     <div>
-       <h1></h1>
-       <ul></ul>
+      <label for="todo-item">Add todo:</label>
+      <input type="text" name="todo-item">
+      <button type="button">Add</button>
+    </div>
+  `;
 
-       <label for="todo-item">Add todo:</label>
-       <input type="text" name="todo-item">
-       <button type="button">Add</button>
-     </div>`;
-
-  static get observedAttributes(): readonly string[] {
-    return TodoList.observedProps;
-  }
-
-  async connectedCallback(): Promise<void> {
-    this.render();
+  protected override async onRender(): Promise<void> {
     this.registerElements();
     this.registerEventListeners();
     await this.setupProps();
-  }
-
-  async attributeChangedCallback(property: string, oldValue: any, newValue: any): Promise<void> {
-    if (oldValue === newValue)
-      return;
-
-    if (TodoList.propsSet.has(property))
-      await this.props.updateProp(property, newValue);
-  }
-
-  render(): void {
-    this.shadowRoot.innerHTML = TodoList.html;
   }
 
   registerElements(): void {
@@ -78,3 +60,9 @@ class TodoList extends HTMLElement {
 }
 
 customElements.define("todo-list", TodoList);
+
+declare global {
+  interface HTMLElementTagNameMap {
+    "todo-list": TodoList
+  }
+}
