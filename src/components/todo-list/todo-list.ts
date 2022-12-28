@@ -1,4 +1,4 @@
-import { TodoListObservedProp } from "./types";
+import { TodoListObservedProp } from "./types.js";
 import { Props } from "../../models/props.js";
 
 class TodoList extends HTMLElement {
