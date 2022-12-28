@@ -13,6 +13,10 @@
     "sourceType": "module"
   },
   "rules": {
+    "strict": [
+      "error",
+      "global"
+    ],
     "no-duplicate-imports": [
       "error",
       {
