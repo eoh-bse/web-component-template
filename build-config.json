@@ -1,0 +1,6 @@
+{
+  "target": "./build",
+  "cssFiles": "./src/",
+  "htmlFiles": "./src/",
+  "shouldMinify": false
+}
