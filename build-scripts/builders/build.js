@@ -1,4 +1,5 @@
 // IMPORTANT!: This file must be executed at the root of this project
+"use strict";
 
 import { exec } from "child_process";
 import util from "util";

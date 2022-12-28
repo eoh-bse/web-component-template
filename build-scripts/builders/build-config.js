@@ -1,16 +1,19 @@
+"use strict";
+
 import { existsSync } from "fs";
+import { readFile } from "fs/promises";
 import path from "path";
 
 const defaultConfig = {
   shouldMinify: false
-}
+};
 
 class BuildConfig {
   constructor() {
     this.config = null;
   }
 
-  _overrideProperties(to, from) {
+  static _overrideProperties(to, from) {
     for (const prop in from) {
       if (from[prop] === undefined)
         continue;
@@ -19,35 +22,30 @@ class BuildConfig {
     }
   }
 
-  _validateConfig(config) {
+  static _validateConfig(config) {
     if (!config.target)
-      throw "target folder has not been set";
+      throw new Error("target folder has not been set");
 
     if (!existsSync(path.resolve(config.htmlFiles)))
-      throw `path to html files does not exist`;
+      throw new Error("path to html files does not exist");
 
     if (!existsSync(path.resolve(config.cssFiles)))
-      throw `path to css files does not exist`;
+      throw new Error("path to css files does not exist");
   }
 
-  _getBuildConfig(parsedConfig) {
+  static _getBuildConfig(parsedConfig) {
     let finalConfig = {};
-    [defaultConfig, parsedConfig].forEach(conf => this._overrideProperties(finalConfig, conf));
+    [defaultConfig, parsedConfig].forEach(conf => BuildConfig._overrideProperties(finalConfig, conf));
 
-    this._validateConfig(finalConfig);
+    BuildConfig._validateConfig(finalConfig);
 
     return finalConfig;
   }
 
   async getOrCreate() {
     if (this.config === null) {
-      const parsedConfig = (await import("../../build-config.json", {
-        assert: {
-          type: "json"
-        }
-      })).default;
-
-      this.config = this._getBuildConfig(parsedConfig);
+      const parsedConfig = JSON.parse(await readFile("./build-config.json", { encoding: "UTF-8" }));
+      this.config = BuildConfig._getBuildConfig(parsedConfig);
     }
 
     return this.config;

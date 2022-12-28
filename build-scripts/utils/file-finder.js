@@ -7,7 +7,7 @@ function getAllFiles(dir) {
 
 function getAllFilesMatchingRegex(dir, regex) {
   const files = fs.readdirSync(dir);
-  if (files.length == 0)
+  if (files.length === 0)
     return files;
 
   const fullPathFiles = [];
@@ -19,9 +19,8 @@ function getAllFilesMatchingRegex(dir, regex) {
       continue;
     }
 
-    if (regex.test(file)) {
+    if (regex.test(file))
       fullPathFiles.push(fullPath);
-    }
   }
 
   for (const directory of dirs) {

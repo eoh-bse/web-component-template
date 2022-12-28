@@ -10,9 +10,9 @@ const options = {
   removeRedundantAttributes: true,
   removeScriptTypeAttributes: true,
   removeStyleLinkTypeAttributes: true
-}
+};
 
-async function minifyHtml(htmlContent) {
+function minifyHtml(htmlContent) {
   return minify(htmlContent, options);
 }
 
