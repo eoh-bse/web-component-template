@@ -2,6 +2,7 @@
 "use strict";
 
 import { exec } from "child_process";
+import { rm, mkdir } from "fs/promises";
 import util from "util";
 
 import BuildConfigSingleton from "./build-config.js";
@@ -10,9 +11,18 @@ import { minify } from "../minifiers/minifier.js";
 
 const executeCmd = util.promisify(exec);
 
+function clean(config) {
+  return rm(config.target, {
+    recursive: true,
+    force: true
+  });
+}
+
 async function compile(config) {
   console.info("Compiling typescript files...");
-  const { error, stderr } = await executeCmd(`node_modules/typescript/bin/tsc --outDir ${config.target}`);
+  const { error, stderr } =
+    await executeCmd(`node_modules/typescript/bin/tsc --outDir ${config.target} --project ${config.tsConfig}`);
+
   if (error)
     throw error;
 
@@ -23,7 +33,7 @@ async function compile(config) {
 }
 
 async function copyStaticFiles(config) {
-  console.info("Copying static files into build folder...");
+  console.info(`Copying static files into ${config.target}...`);
   const htmlFiles = (await getAllFilesMatchingRegex(config.htmlFiles, /.*\.html$/)).join(" ");
   const cssFiles = (await getAllFilesMatchingRegex(config.cssFiles, /.*\.css$/)).join(" ");
 
@@ -34,11 +44,12 @@ async function copyStaticFiles(config) {
   if (stderr)
     throw stderr;
 
-  console.info("Static files were successfully copied to build folder");
+  console.info("Static files were successfully copied");
 }
 
 const buildConfig = await BuildConfigSingleton.instance.getOrCreate();
 
+await clean(buildConfig);
 await compile(buildConfig);
 await copyStaticFiles(buildConfig);
 

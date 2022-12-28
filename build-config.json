@@ -1,6 +1,16 @@
 {
-  "target": "./build",
-  "cssFiles": "./src/",
-  "htmlFiles": "./src/",
-  "shouldMinify": false
+  "default": {
+    "target": "./build",
+    "tsConfig": "./tsconfig.json",
+    "cssFiles": "./src/",
+    "htmlFiles": "./src/",
+    "shouldMinify": false
+  },
+  "test": {
+    "target": "./test-build",
+    "tsConfig": "./tests/tsconfig.json"
+  },
+  "prod": {
+    "shouldMinify": true
+  }
 }

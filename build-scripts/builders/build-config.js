@@ -3,14 +3,12 @@
 import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import path from "path";
-
-const defaultConfig = {
-  shouldMinify: false
-};
+import { getEnvironment } from "./arg-parser.js";
 
 class BuildConfig {
   constructor() {
     this.config = null;
+    this.env = getEnvironment();
   }
 
   static _overrideProperties(to, from) {
@@ -33,9 +31,9 @@ class BuildConfig {
       throw new Error("path to css files does not exist");
   }
 
-  static _getBuildConfig(parsedConfig) {
+  static _getBuildConfig(defaultConfig, envConfig) {
     let finalConfig = {};
-    [defaultConfig, parsedConfig].forEach(conf => BuildConfig._overrideProperties(finalConfig, conf));
+    [defaultConfig, envConfig].forEach(conf => BuildConfig._overrideProperties(finalConfig, conf));
 
     BuildConfig._validateConfig(finalConfig);
 
@@ -45,7 +43,12 @@ class BuildConfig {
   async getOrCreate() {
     if (this.config === null) {
       const parsedConfig = JSON.parse(await readFile("./build-config.json", { encoding: "UTF-8" }));
-      this.config = BuildConfig._getBuildConfig(parsedConfig);
+      if (this.env === "default") {
+        this.config = parsedConfig.default;
+        return this.config;
+      }
+
+      this.config = BuildConfig._getBuildConfig(parsedConfig.default, parsedConfig[this.env]);
     }
 
     return this.config;
