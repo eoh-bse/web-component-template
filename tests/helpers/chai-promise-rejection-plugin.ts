@@ -74,8 +74,8 @@ export default function(chai: Chai.ChaiStatic, utils: Chai.ChaiUtils): void {
         );
       }
       else {
-        assertion.to.not.deep.equal(
-          expectedError,
+        assertion.to.not.equal(
+          expectedError.toString(),
           `expected promise not to be rejected with ${expectedError.toString()}`
         );
       }
