@@ -1,5 +1,5 @@
 import { TodoListObservedProp } from "./types";
-import { Props } from "../../lib/Props.js";
+import { Props } from "../../models/props.js";
 
 class TodoList extends HTMLElement {
   private static readonly observedProps: readonly TodoListObservedProp[] = [TodoListObservedProp.Name];

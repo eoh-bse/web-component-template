@@ -112,7 +112,7 @@
         "@typescript-eslint"
       ],
       "rules": {
-        "no-console": "error",
+        "no-console": "warn",
         "@typescript-eslint/array-type": [
           "error",
           {

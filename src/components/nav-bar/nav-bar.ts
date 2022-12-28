@@ -1,6 +1,6 @@
 import type { Menu } from "./types";
 
-export default class NavBar extends HTMLElement {
+class NavBar extends HTMLElement {
   private readonly menus: readonly Menu[] = [
     {
       name: "Home",
