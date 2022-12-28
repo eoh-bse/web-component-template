@@ -7,6 +7,7 @@ import { cleanDirectory } from "../utils/directory-cleaner.js";
 import BuildConfigSingleton from "./build-config.js";
 import { getAllFilesMatchingRegex } from "../utils/file-finder.js";
 import { minify } from "../minifiers/minifier.js";
+import { addContentHashToCacheableFiles } from "./cache-breaker-provider.js";
 
 const executeCmd = util.promisify(exec);
 
@@ -49,4 +50,7 @@ if (buildConfig.shouldMinify) {
   console.info("Minifying...");
   await minify(buildConfig.target);
   console.info("Successfully minified output files");
+
+  await addContentHashToCacheableFiles(buildConfig.target);
+  console.info("Added content hash to js and css files...");
 }
