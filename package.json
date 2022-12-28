@@ -1,21 +1,38 @@
 {
   "name": "web-components",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "node dev-server/dev-server.js",
-    "dev": "nodemon dev-server/dev-server.js",
-    "copy-static-files": "cp -r ./pages/**/*.css ./build/ && cp -r ./pages/**/*.html ./build/",
-    "build": "tsc && npm run copy-static-files",
-    "watch": "tsc && npm run copy-static-files && tsc --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "preinstall": "npx force-resolutions",
+    "start": "node ./build-scripts/watchers/watcher.js",
+    "build": "node ./build-scripts/builders/build.js",
+    "build:prod": "npm run build -- --env prod",
+    "build:test": "npm run build -- --env test",
+    "test": "npm run build:test && web-test-runner --coverage",
+    "lint": "eslint **/*.ts **/*.js"
   },
   "author": "Elbert Oh",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "express": "^4.18.1",
-    "nodemon": "^2.0.16",
-    "typescript": "^4.6.4"
+    "@open-wc/semantic-dom-diff": "^0.19.7",
+    "@open-wc/testing": "^3.1.7",
+    "@types/chai": "^4.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "@web/dev-server-esbuild": "^0.3.3",
+    "@web/test-runner": "^0.15.0",
+    "@web/test-runner-playwright": "^0.9.0",
+    "chokidar": "^3.5.3",
+    "clean-css": "^5.3.1",
+    "eslint": "^8.21.0",
+    "html-minifier-terser": "^7.0.0",
+    "terser": "^5.15.1",
+    "ts-lit-plugin": "^1.2.1",
+    "typescript": "^4.8.4",
+    "typescript-lit-html-plugin": "^0.9.0"
+  },
+  "resolutions": {
+    "glob-parent": "6.0.2"
   }
 }

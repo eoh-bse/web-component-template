@@ -1,0 +1,138 @@
+{
+  "root": true,
+  "env": {
+    "node": true,
+    "es6": true,
+    "es2016": true
+  },
+  "extends": [
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 13,
+    "sourceType": "module"
+  },
+  "rules": {
+    "strict": [
+      "error",
+      "global"
+    ],
+    "no-duplicate-imports": [
+      "error",
+      {
+        "includeExports": true
+      }
+    ],
+    "no-promise-executor-return": "error",
+    "require-atomic-updates": "error",
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false
+      }
+    ],
+    "no-constant-binary-expression": "error",
+    "class-methods-use-this": "error",
+    "block-scoped-var": "error",
+    "no-return-await": "error",
+    "require-await": "error",
+    "func-names": "off",
+    "curly": [
+      "error",
+      "multi-or-nest"
+    ],
+    "eqeqeq": "error",
+    "id-length": "error",
+    "arrow-spacing": "error",
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
+    "array-bracket-newline": "error",
+    "array-element-newline": [
+      "error",
+      "consistent"
+    ],
+    "no-multi-spaces": "error",
+    "no-trailing-spaces": "error",
+    "no-whitespace-before-property": "error",
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "object-curly-newline": [
+      "error",
+      {
+        "consistent": true
+      }
+    ],
+    "object-property-newline": "error",
+    "semi": [
+      "error",
+      "always"
+    ],
+    "semi-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "semi-style": [
+      "error",
+      "last"
+    ],
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "no-unused-vars": "off"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.ts"
+      ],
+      "env": {
+        "browser": true,
+        "es6": true,
+        "es2016": true
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/strict"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": [
+          "./tsconfig.json",
+          "./tests/tsconfig.json"
+        ]
+      },
+      "plugins": [
+        "@typescript-eslint"
+      ],
+      "rules": {
+        "no-console": "error",
+        "@typescript-eslint/array-type": [
+          "error",
+          {
+            "default": "array",
+            "readonly": "array"
+          }
+        ],
+        "@typescript-eslint/consistent-generic-constructors": [
+          "error",
+          "type-annotation"
+        ],
+        "@typescript-eslint/explicit-function-return-type": "error",
+        "@typescript-eslint/consistent-type-exports": "error",
+        "@typescript-eslint/consistent-type-imports": "error",
+        "@typescript-eslint/consistent-type-definitions": "off",
+        "@typescript-eslint/no-unnecessary-condition": "off",
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/prefer-nullish-coalescing": "off"
+      }
+    }
+  ]
+}
