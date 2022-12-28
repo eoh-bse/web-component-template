@@ -7,8 +7,10 @@ class TodoList extends BaseComponent {
 
   private todoListOwner: HTMLHeadingElement;
   private list: HTMLUListElement;
-  private addTodoTextBox: HTMLInputElement;
+  private addTodoInput: HTMLInputElement;
   private addTodoBtn: HTMLButtonElement;
+  private nameChangeInput: HTMLInputElement;
+  private nameChangeBtn: HTMLButtonElement;
 
   static override styles: Css = css`
     h1 {
@@ -21,9 +23,17 @@ class TodoList extends BaseComponent {
       <h1></h1>
       <ul></ul>
 
-      <label for="todo-item">Add todo:</label>
-      <input type="text" name="todo-item">
-      <button type="button">Add</button>
+      <div id="add-todo">
+        <label for="todo-item">Add todo:</label>
+        <input type="text" name="todo-item">
+        <button type="button">Add</button>
+      </div>
+
+      <div id="name-change">
+        <label for="name-change">Change Name:</label>
+        <input type="text" name="name-change">
+        <button type="button">Change Name</button>
+      </div>
     </div>
   `;
 
@@ -36,12 +46,15 @@ class TodoList extends BaseComponent {
   registerElements(): void {
     this.todoListOwner = this.shadowRoot.querySelector("h1");
     this.list = this.shadowRoot.querySelector("ul");
-    this.addTodoTextBox = this.shadowRoot.querySelector("input");
-    this.addTodoBtn = this.shadowRoot.querySelector("button");
+    this.addTodoInput = this.shadowRoot.querySelector("#add-todo input");
+    this.addTodoBtn = this.shadowRoot.querySelector("#add-todo button");
+    this.nameChangeInput = this.shadowRoot.querySelector("#name-change input");
+    this.nameChangeBtn = this.shadowRoot.querySelector("#name-change button");
   }
 
   registerEventListeners(): void {
     this.addTodoBtn.addEventListener("click", this.onAddTodo.bind(this));
+    this.nameChangeBtn.addEventListener("click", this.onNameChange.bind(this));
   }
 
   async setupProps(): Promise<void> {
@@ -53,9 +66,14 @@ class TodoList extends BaseComponent {
 
   onAddTodo(): void {
     const todoItem = document.createElement("li");
-    todoItem.innerText = this.addTodoTextBox.value;
-    this.addTodoTextBox.value = "";
+    todoItem.innerText = this.addTodoInput.value;
+    this.addTodoInput.value = "";
     this.list.appendChild(todoItem);
+  }
+
+  onNameChange(): void {
+    this.setAttribute(TodoListObservedProp.Name, this.nameChangeInput.value);
+    this.nameChangeInput.value = "";
   }
 }
 
