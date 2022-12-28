@@ -32,10 +32,7 @@
     "block-scoped-var": "error",
     "no-return-await": "error",
     "require-await": "error",
-    "func-names": [
-      "error",
-      "always"
-    ],
+    "func-names": "off",
     "curly": [
       "error",
       "multi-or-nest"

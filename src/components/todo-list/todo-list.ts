@@ -32,19 +32,19 @@ class TodoList extends HTMLElement {
     return TodoList.observedProps;
   }
 
-  connectedCallback(): void {
+  async connectedCallback(): Promise<void> {
     this.render();
     this.registerElements();
     this.registerEventListeners();
-    this.setupProps();
+    await this.setupProps();
   }
 
-  attributeChangedCallback(property: string, oldValue: any, newValue: any): void {
+  async attributeChangedCallback(property: string, oldValue: any, newValue: any): Promise<void> {
     if (oldValue === newValue)
       return;
 
     if (TodoList.propsSet.has(property))
-      this.props.updateProp(property, newValue);
+      await this.props.updateProp(property, newValue);
   }
 
   render(): void {
@@ -62,9 +62,10 @@ class TodoList extends HTMLElement {
     this.addTodoBtn.addEventListener("click", this.onAddTodo.bind(this));
   }
 
-  setupProps(): void {
-    this.props.addCallback(TodoListObservedProp.Name, true, (value: any): void => {
+  async setupProps(): Promise<void> {
+    await this.props.addCallbackAndTrigger(TodoListObservedProp.Name, (value: any): Promise<void> => {
       this.todoListOwner.innerText = `${value}'s todo list`;
+      return Promise.resolve();
     });
   }
 

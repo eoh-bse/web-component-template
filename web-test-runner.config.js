@@ -1,7 +1,7 @@
 import { esbuildPlugin } from "@web/dev-server-esbuild";
 
 export default {
-  files: ["**/*.spec.ts"],
+  files: ["**/*.spec.ts", "**/*.test.ts"],
   plugins: [
     esbuildPlugin({
       ts: true,
