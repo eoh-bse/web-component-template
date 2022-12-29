@@ -3,6 +3,9 @@
   "type": "module",
   "version": "1.0.0",
   "description": "Simple, lightweight and unopinionated boilerplate code set-up for web-component-based front-end project with heavy focus on avoiding bloat and complexity that comes with external dependencies",
+  "engines": {
+    "node": ">=18.3.0"
+  },
   "scripts": {
     "preinstall": "npx force-resolutions",
     "start": "node ./build-scripts/watchers/watcher.js",
