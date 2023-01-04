@@ -13,7 +13,8 @@
     "build:prod": "npm run build -- --env prod",
     "build:test": "npm run build -- --env test",
     "test": "npm run build:test && web-test-runner --coverage",
-    "lint": "eslint **/*.ts **/*.js"
+    "lint": "eslint **/*.ts **/*.js",
+    "update-snapshots": "web-test-runner --update-snapshots"
   },
   "author": "Elbert Oh <ellokri89@gmail.com> (https://github.com/eoh-bse)",
   "license": "MIT",
