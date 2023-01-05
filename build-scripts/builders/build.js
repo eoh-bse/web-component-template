@@ -4,6 +4,7 @@ import util from "util";
 import { cleanDirectory } from "../utils/directory-cleaner.js";
 import BuildConfigSingleton from "./build-config.js";
 import { getAllFilesMatchingRegex } from "../utils/file-finder.js";
+import { copyFilesOrDirs } from "../utils/file-copier.js";
 import { minify } from "../minifiers/minifier.js";
 import { addContentHashToCacheableFiles } from "./cache-breaker-provider.js";
 
@@ -38,11 +39,18 @@ async function copyStaticFiles(config) {
   console.info("Static files were successfully copied");
 }
 
+async function copyOtherFiles(config) {
+  console.info(`Copying additional files/directories into ${config.target}...`);
+  await copyFilesOrDirs(config.otherFiles, config.target);
+  console.info("Successfully copied additional files/directories");
+}
+
 const buildConfig = await BuildConfigSingleton.instance.getOrCreate();
 
 await cleanDirectory(buildConfig.target);
 await compile(buildConfig);
 await copyStaticFiles(buildConfig);
+await copyOtherFiles(buildConfig);
 
 if (buildConfig.shouldMinify) {
   console.info("Minifying...");

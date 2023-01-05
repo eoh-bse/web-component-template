@@ -9,14 +9,14 @@ const buildConfig = await BuildConfigSingleton.instance.getOrCreate();
 
 function onAdd(filePath) {
   if (filePath.endsWith(".html")) {
-    console.log(`${filePath} has been added`);
+    console.info(`${filePath} has been added`);
     return executeCmd(`cp ${filePath} ${buildConfig.target}`);
   }
 }
 
 function onChange(filePath) {
   if (filePath.endsWith(".html")) {
-    console.log(`${filePath} has been updated`);
+    console.info(`${filePath} has been updated`);
     return executeCmd(`cp ${filePath} ${buildConfig.target}`);
   }
 }

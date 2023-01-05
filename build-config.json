@@ -4,6 +4,9 @@
     "tsConfig": "./tsconfig.json",
     "cssFiles": "./src/",
     "htmlFiles": "./src/",
+    "otherFiles": [
+      "./assets/"
+    ],
     "shouldMinify": false
   },
   "test": {
