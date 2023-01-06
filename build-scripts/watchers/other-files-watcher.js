@@ -1,4 +1,5 @@
 import { exec } from "child_process";
+import { mkdir } from "fs/promises";
 import util from "util";
 import path from "path";
 import { watchDir } from "./dir-watcher.js";
@@ -8,14 +9,17 @@ const executeCmd = util.promisify(exec);
 
 const buildConfig = await BuildConfigSingleton.instance.getOrCreate();
 
-function onAdd(filePath) {
+async function onAdd(filePath) {
   console.info(`${filePath} has been added`);
-  return executeCmd(`cp ${filePath} ${path.join(buildConfig.target, path.dirname(filePath))}`);
+  const targetDir = path.join(buildConfig.target, path.dirname(filePath));
+  await mkdir(targetDir, { recursive: true });
+  return executeCmd(`cp ${filePath} ${targetDir}`);
 }
 
 function onChange(filePath) {
   console.info(`${filePath} has been updated`);
-  return executeCmd(`cp ${filePath} ${path.join(buildConfig.target, path.dirname(filePath))}`);
+  const targetDir = path.join(buildConfig.target, path.dirname(filePath));
+  return executeCmd(`cp ${filePath} ${targetDir}`);
 }
 
 watchDir(buildConfig.otherFiles, onAdd, onChange);

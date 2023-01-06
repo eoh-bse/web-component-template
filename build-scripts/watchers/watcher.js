@@ -2,7 +2,6 @@ import { spawn } from "child_process";
 import { getAllFilesMatchingRegex } from "../utils/file-finder.js";
 import { cleanDirectory } from "../utils/directory-cleaner.js";
 import BuildConfigSingleton from "../builders/build-config.js";
-import { copyFilesOrDirs } from "../utils/file-copier.js";
 
 function ensureCompilationCompletion(tsOutDir) {
   let tsCompilationDone = false;
@@ -15,7 +14,6 @@ function ensureCompilationCompletion(tsOutDir) {
 const buildConfig = await BuildConfigSingleton.instance.getOrCreate();
 
 await cleanDirectory(buildConfig.target);
-await copyFilesOrDirs(buildConfig.otherFiles, buildConfig.target);
 
 spawn(
   "node_modules/typescript/bin/tsc",
