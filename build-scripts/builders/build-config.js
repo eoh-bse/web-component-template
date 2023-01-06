@@ -27,6 +27,9 @@ class BuildConfig {
 
     if (!existsSync(path.resolve(config.cssFiles)))
       throw new Error("path to css files does not exist");
+
+    if (config.otherFiles && !(config.otherFiles instanceof Array))
+      throw new Error("otherFiles option must be an array of paths in string");
   }
 
   static _getBuildConfig(defaultConfig, envConfig) {
@@ -41,12 +44,9 @@ class BuildConfig {
   async getOrCreate() {
     if (this.config === null) {
       const parsedConfig = JSON.parse(await readFile("./build-config.json", { encoding: "UTF-8" }));
-      if (this.env === "default") {
-        this.config = parsedConfig.default;
-        return this.config;
-      }
+      const override = this.env === "default" ? {} : parsedConfig[this.env];
 
-      this.config = BuildConfig._getBuildConfig(parsedConfig.default, parsedConfig[this.env]);
+      this.config = BuildConfig._getBuildConfig(parsedConfig.default, override);
     }
 
     return this.config;

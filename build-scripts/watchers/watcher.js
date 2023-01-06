@@ -32,6 +32,11 @@ spawn("node ./build-scripts/watchers/css-file-watcher.js", {
   shell: true,
   stdio: "inherit"
 });
+spawn("node ./build-scripts/watchers/other-files-watcher.js", {
+  shell: true,
+  stdio: "inherit"
+});
+
 
 console.log("Ensuring typescript compilation is finished...");
 ensureCompilationCompletion(buildConfig.target);
