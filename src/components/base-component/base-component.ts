@@ -15,6 +15,7 @@ abstract class BaseComponent extends HTMLElement {
   constructor() {
     super();
 
+    this.onCreate();
     this.attachShadow({ mode: "open" });
   }
 
@@ -30,6 +31,7 @@ abstract class BaseComponent extends HTMLElement {
   }
 
   async connectedCallback(): Promise<void> {
+    await this.beforeRender();
     this.render();
     await this.onRender();
   }
@@ -39,7 +41,18 @@ abstract class BaseComponent extends HTMLElement {
     this.shadowRoot.appendChild(this._currentClass.template.content.cloneNode(true));
   }
 
-  protected abstract onRender(): Promise<void>;
+  /* Overridable lifecycle methods */
+
+  protected onCreate(): void {
+  }
+
+  protected beforeRender(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  protected onRender(): Promise<void> {
+    return Promise.resolve();
+  }
 }
 
 export type { Css };

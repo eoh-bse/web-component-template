@@ -11,9 +11,14 @@ const buildConfig = await BuildConfigSingleton.instance.getOrCreate();
 
 async function onAdd(filePath) {
   console.info(`${filePath} has been added`);
-  const targetDir = path.join(buildConfig.target, path.dirname(filePath));
-  await mkdir(targetDir, { recursive: true });
-  return executeCmd(`cp ${filePath} ${targetDir}`);
+  try {
+    const targetDir = path.join(buildConfig.target, path.dirname(filePath));
+    await mkdir(targetDir, { recursive: true });
+    await executeCmd(`cp ${filePath} ${targetDir}`);
+  } catch (ex) {
+    console.error(`Failed to add ${filePath}`);
+    console.error(ex);
+  }
 }
 
 function onChange(filePath) {

@@ -32,7 +32,6 @@
       }
     ],
     "no-constant-binary-expression": "error",
-    "class-methods-use-this": "error",
     "block-scoped-var": "error",
     "no-return-await": "error",
     "require-await": "error",
@@ -42,7 +41,14 @@
       "multi-or-nest"
     ],
     "eqeqeq": "error",
-    "id-length": "error",
+    "id-length": [
+      "error",
+      {
+        "exceptions": [
+          "i"
+        ]
+      }
+    ],
     "arrow-spacing": "error",
     "arrow-parens": [
       "error",
