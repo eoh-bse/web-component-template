@@ -22,18 +22,18 @@
     "@open-wc/semantic-dom-diff": "^0.19.7",
     "@open-wc/testing": "^3.1.7",
     "@types/chai": "^4.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.32.0",
-    "@typescript-eslint/parser": "^5.32.0",
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
     "@web/dev-server-esbuild": "^0.3.3",
     "@web/test-runner": "^0.15.0",
     "@web/test-runner-playwright": "^0.9.0",
     "chokidar": "^3.5.3",
     "clean-css": "^5.3.1",
-    "eslint": "^8.21.0",
+    "eslint": "^8.34.0",
     "html-minifier-terser": "^7.0.0",
     "terser": "^5.15.1",
     "ts-lit-plugin": "^1.2.1",
-    "typescript": "^4.8.4"
+    "typescript": "^4.9.5"
   },
   "resolutions": {
     "glob-parent": "6.0.2"
