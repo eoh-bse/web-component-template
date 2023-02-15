@@ -36,6 +36,20 @@ describe("State.update should", () => {
     expect(retrievedValue).to.equal(newValue);
   });
 
+  it("execute registered update hooks with old and new value of the given key", async () => {
+    const state = new State();
+    const key = "name", oldName = "David", newName = "Alexis";
+    await state.update(key, oldName);
+
+    state.addUpdateHook(key, (newValue, oldValue) => {
+      expect(newValue).to.equal(newName);
+      expect(oldValue).to.equal(oldName);
+      return Promise.resolve();
+    });
+
+    await state.update(key, newName);
+  });
+
   it("execute all the registered update hooks when the given new value is different from the current value", async () => {
     const state = new State();
     const key = "name", oldValue = "David", newValue = "Alexis";
@@ -43,11 +57,11 @@ describe("State.update should", () => {
 
     let counter0 = 0;
     let counter1 = 10;
-    state.addUpdateHook(key, (): Promise<void> => {
+    state.addUpdateHook(key, () => {
       counter0++;
       return Promise.resolve();
     });
-    state.addUpdateHook(key, (): Promise<void> => {
+    state.addUpdateHook(key, () => {
       counter1++;
       return Promise.resolve();
     });
@@ -64,7 +78,7 @@ describe("State.update should", () => {
     await state.update(key, oldValue);
 
     let counter0 = 0;
-    state.addUpdateHook(key, (): Promise<void> => {
+    state.addUpdateHook(key, () => {
       counter0++;
       return Promise.resolve();
     });
@@ -80,7 +94,7 @@ describe("State.addUpdateHook should", () => {
     const state = new State();
     const key = "name";
 
-    expect(() => state.addUpdateHook(key, (): Promise<void> => Promise.resolve()))
+    expect(() => state.addUpdateHook(key, () => Promise.resolve()))
       .to
       .throw(Error, buildAddCallbackError(key));
   });
@@ -91,7 +105,7 @@ describe("State.addUpdateHookAndTrigger should", () => {
     const state = new State();
     const key = "name";
 
-    await expect(state.addUpdateHookAndTrigger(key, (): Promise<void> => Promise.resolve()))
+    await expect(state.addUpdateHookAndTrigger(key, () => Promise.resolve()))
       .to
       .be
       .rejectedWith(new Error(buildAddCallbackError(key)));
@@ -103,7 +117,7 @@ describe("State.addUpdateHookAndTrigger should", () => {
     state.update(key, value);
 
     let counter = 0;
-    await state.addUpdateHookAndTrigger(key, (): Promise<void> => {
+    await state.addUpdateHookAndTrigger(key, () => {
       counter++;
       return Promise.resolve();
     });
